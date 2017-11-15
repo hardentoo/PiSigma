@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleContexts     #-}
 
 module Language.PiSigma.Equality
   ( eq )

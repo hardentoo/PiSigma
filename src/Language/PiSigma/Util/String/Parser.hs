@@ -36,8 +36,6 @@ import qualified Data.String as String
 
 type String = LazyUTF8.ByteString
 
-instance String.IsString String where
-  fromString = fromString
 
 append     :: String -> String -> String
 append      = Lazy.append

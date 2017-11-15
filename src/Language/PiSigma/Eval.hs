@@ -19,13 +19,15 @@ instance Error EvalErr where
 
 
 newtype Eval a = Eval { unEval :: ReaderT Constrs (StateT EnvEntries (ErrorT EvalErr Identity)) a }
-  deriving ( Monad
+  deriving (Functor
+           , Applicative
+           , Monad
            , MonadError EvalErr
            , MonadState EnvEntries
            , MonadReader Constrs)
 
 run :: EnvEntries -> Eval a -> Either EvalErr (a, EnvEntries)
-run e (Eval p) = runIdentity $ runErrorT $ runStateT (runReaderT p emptyC) e 
+run e (Eval p) = runIdentity $ runErrorT $ runStateT (runReaderT p emptyC) e
 
 catchE :: Eval a -> (EvalErr -> Eval a) -> Eval a
 catchE = catchError
@@ -35,4 +37,3 @@ getEnv = get
 
 setEnv :: EnvEntries -> Eval ()
 setEnv = put
-

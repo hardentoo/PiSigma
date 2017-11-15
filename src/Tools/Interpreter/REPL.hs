@@ -2,6 +2,7 @@
 {-# LANGUAGE    GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE    OverloadedStrings          #-}
 {-# LANGUAGE    ScopedTypeVariables        #-}
+{-# LANGUAGE    StandaloneDeriving        #-}
 
 module Tools.Interpreter.REPL
   ( REPL (..)
@@ -11,13 +12,14 @@ module Tools.Interpreter.REPL
   , runREPL )
   where
 
-import Prelude hiding (catch)
+import Prelude hiding (catch, (<$>))
 import Control.Monad.Error
 import Control.Monad.State
 import Control.Monad.Trans
 import Data.Char
 import qualified Data.List as List
 import System.Console.Haskeline.Class
+import System.Console.Haskeline.MonadException
 import System.IO
 import Data.Version (showVersion)
 
@@ -40,10 +42,10 @@ import Paths_pisigma
 
 -- * Instances needed for newtype deriving
 
-instance (Error e, MonadException m) => MonadException (ErrorT e m) where
-  catch m = ErrorT . catch (runErrorT m) . (runErrorT .)
-  block   = mapErrorT block
-  unblock = mapErrorT unblock
+--instance (Error e, MonadException m) => MonadException (ErrorT e m) where
+  --catch m = ErrorT . catch (runErrorT m) . (runErrorT .)
+  --block   = mapErrorT block
+  --unblock = mapErrorT unblock
 
 instance (Error e, MonadHaskeline m) => MonadHaskeline (ErrorT e m) where
   getInputLine = lift . getInputLine
@@ -53,16 +55,6 @@ instance (Error e, MonadHaskeline m) => MonadHaskeline (ErrorT e m) where
 
 -- * Types
 
--- | The REPL monad has exceptions, a line editor with history using
--- Haskeline, and state.
-newtype REPL a = REPL { unREPL :: ErrorT REPLError (HaskelineT (StateT REPLState IO)) a }
-  deriving ( Monad
-           , MonadException
-           , MonadError REPLError
-           , MonadHaskeline
-           , MonadIO
-           , MonadState REPLState )
-
 -- | The state currently keeps track of identifiers defined and their
 -- types, as well as a list of files currently loaded.
 data REPLState =
@@ -70,6 +62,19 @@ data REPLState =
     { replState :: (Scope, EnvEntries)
     , replFiles :: [FilePath]
     }
+
+
+-- | The REPL monad has exceptions, a line editor with history using
+-- Haskeline, and state.
+newtype REPL a = REPL { unREPL :: ErrorT REPLError (HaskelineT (StateT REPLState IO)) a }
+  deriving ( Monad
+           , Functor
+           , Applicative
+           , MonadException
+           , MonadError REPLError
+           , MonadHaskeline
+           , MonadIO
+           , MonadState REPLState )
 
 -- TODO: Add a search path and verbosity options.
 

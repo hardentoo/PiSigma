@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings    #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Language.PiSigma.Syntax
   ( Bind
@@ -351,7 +352,7 @@ data Ne
   deriving (Show, Eq)
 
 -- | Patterns
-data Pat 
+data Pat
    = PLabel Label
 --   | PPair (Id,Id)
 --   | PFold Id

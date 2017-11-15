@@ -5,6 +5,9 @@ module Language.PiSigma.Check
   , infer )
   where
 
+import Prelude
+  hiding
+    ((<$>))
 import Control.Arrow
   ( first )
 import Control.Monad.Error
@@ -97,7 +100,7 @@ checkProg' decls defns ((Defn l x t):tel,g) =
        check (t,g) a
        i <- getId l x g
        defn' i (t,g)
-       if not (x `Set.member` decls) 
+       if not (x `Set.member` decls)
         then notDeclHere x
         else checkProg' decls (Set.insert x defns) (tel,g)
 
@@ -204,7 +207,7 @@ check' (Fold _ t,g) (VRec a) =
 check' t a =
     do b <- infer' t
        catchE (eq a b) $ \ s -> expectedButFound t a b "Check"
--- line below leads to a runtime error 
+-- line below leads to a runtime error
 --       catchE (eq a b) $ \ s -> expectedButFound t a b (Internal.append "Check" s)
 
 -- * Inference

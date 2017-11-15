@@ -69,8 +69,8 @@ import Language.PiSigma.Syntax
 import qualified Language.PiSigma.Util.String.Parser
   as Parser
 
-instance (Monad m) => Stream Parser.String m Char where
-  uncons = return . Parser.uncons
+--instance (Monad m) => Stream Parser.String m Char where
+--  uncons = return . Parser.uncons
 
 type Parser = Parsec Parser.String ()
 
