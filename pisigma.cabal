@@ -36,7 +36,8 @@ library
                     --haskeline-class,
                     mpppc,
                     mtl,
-                    parsec,
+                    -- see https://stackoverflow.com/a/9228290/216028
+                    parsec == 3.0.0,
                     text,
                     utf8-string,
                     containers
