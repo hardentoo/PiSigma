@@ -28,7 +28,8 @@ flag debug
   description:      Enable debug support
   default:          False
 
-library
+executable pisigma
+
   build-depends:    array,
                     base,
                     bytestring,
@@ -41,28 +42,6 @@ library
                     text,
                     utf8-string,
                     containers
-
-  exposed-modules:  Language.PiSigma.Check
-                    Language.PiSigma.Equality
-                    Language.PiSigma.Evaluate
-                    Language.PiSigma.Normalise
-                    Language.PiSigma.Lexer
-                    Language.PiSigma.Parser
-                    Language.PiSigma.Pretty
-                    Language.PiSigma.Syntax
-                    Language.PiSigma.Util.String.Internal
-                    Language.PiSigma.Util.String.Parser
-
-  if flag(debug)
-    ghc-options:    -Wall --enable-library-profiling -auto -funbox-strict-fields
-  else
-    ghc-options:    -funbox-strict-fields
-
-  hs-source-dirs:   src
-
-
-
-executable pisigma
 
   if flag(debug)
     ghc-options:    -Wall --enable-library-profiling -auto -funbox-strict-fields
@@ -84,3 +63,7 @@ executable pisigma
                     Language.PiSigma.Util.String.Internal
                     Language.PiSigma.Util.String.Parser
                     Tools.Interpreter.REPL
+                    Paths_pisigma
+                    Language.PiSigma.Constraints
+                    Language.PiSigma.Eval
+                    System.Console.Haskeline.Class
